@@ -1,0 +1,8 @@
+pandas
+numpy
+pymongo
+ipykernel
+dotenv
+pymongo[srv]==3.6
+certifi
+-e .

@@ -1,8 +1,9 @@
 pandas
-numpy
-pymongo
+Numpy
 ipykernel
-dotenv
+pymongo
 pymongo[srv]==3.6
 certifi
+dotenv
+ssl
 -e .

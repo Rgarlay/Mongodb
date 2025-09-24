@@ -5,3 +5,7 @@ Project.egg-info/dependency_links.txt
 Project.egg-info/requires.txt
 Project.egg-info/top_level.txt
 Retail/__init__.py
+Retail/exception/__init__.py
+Retail/exception/exception.py
+Retail/logging/__init__.py
+Retail/logging/logger.py

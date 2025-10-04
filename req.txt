@@ -6,4 +6,6 @@ pymongo[srv]==3.6
 certifi
 dotenv
 ssl
+scikit-learn
+
 -e .

@@ -1,0 +1,21 @@
+columns: 
+- 'transactions_id': 'int64'
+- 'sale_date': 'object'
+- 'sale_time': 'object'
+- 'customer_id': 'int64'
+- 'gender': 'object'
+- 'age': 'float64'
+- 'category': 'object'
+- 'quantiy': 'float64'
+- 'price_per_unit': 'float64'
+- 'cogs': 'float64'
+- 'total_sale': 'float64'
+
+numerical_columns:
+- transactions_id
+- customer_id
+- age
+- quantiy
+- price_per_unit
+- cogs  
+- total_sale

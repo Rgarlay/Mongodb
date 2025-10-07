@@ -1,5 +1,18 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: Project
 Version: 0.0.1
 Summary: MLOps training
 Author: Ravi Garlay
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: ipykernel
+Requires-Dist: pymongo
+Requires-Dist: certifi
+Requires-Dist: dotenv
+Requires-Dist: scikit-learn
+Requires-Dist: scipy
+Requires-Dist: dill
+Requires-Dist: PyYAML
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: summary

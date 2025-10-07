@@ -1,7 +1,10 @@
 pandas
-Numpy
+numpy
 ipykernel
 pymongo
-pymongo[srv]==3.6
 certifi
 dotenv
+scikit-learn
+scipy
+dill
+PyYAML

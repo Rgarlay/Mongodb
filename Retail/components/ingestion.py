@@ -2,16 +2,14 @@ from Retail.exception.exception import CustomException
 from Retail.logging.logger import logging
 
 ## Call the config. file from the ingestion config.
-
 from Retail.entity.entity_config import DataIngestionConfig
+
 import os
 import sys
 from dotenv import load_dotenv
-
 from typing import List
 from sklearn.model_selection import train_test_split
 import pymongo
-
 from ..entity.artifact_config import DataIngestionArtifact
 import pandas as pd
 import numpy as np

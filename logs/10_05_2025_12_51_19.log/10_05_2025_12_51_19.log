@@ -1,0 +1,10 @@
+[ 2025-10-05 12:51:22,655 ] 15 root - INFO - The code execution has begun
+[ 2025-10-05 12:51:22,656 ] 40 root - INFO - Name of database CSV_FILE
+[ 2025-10-05 12:51:22,656 ] 42 root - INFO - Name of collection Session 2
+[ 2025-10-05 12:51:31,072 ] 48 root - INFO - The number of record in collections is 2000
+[ 2025-10-05 12:51:33,467 ] 52 root - INFO - The type of df is (2000, 13)
+[ 2025-10-05 12:51:33,488 ] 75 root - INFO - (2000, 13)
+[ 2025-10-05 12:51:33,492 ] 78 root - INFO - We have split our data into training and testing part successfully
+[ 2025-10-05 12:51:33,492 ] 80 root - INFO - Exited split_data_as_train_test method of data ingestion class
+[ 2025-10-05 12:51:33,493 ] 86 root - INFO - Created dir for training and testing files
+[ 2025-10-05 12:51:33,514 ] 95 root - INFO - Exported training and testing file path successfully.

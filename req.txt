@@ -1,0 +1,11 @@
+pandas
+numpy
+ipykernel
+pymongo[srv]==3.6
+certifi
+dotenv
+scikit-learn
+scipy
+dill
+PyYAML
+-e .

@@ -1,0 +1,63 @@
+1. Initiated Git repository by: - 
+
+git Init
+git clone
+git add remote origin
+
+Then to push the main code: - 
+
+git status 
+git add .
+git commit -m ""
+git push -u origin  (this is it, nothing more in this line)
+
+Then created conda environment using: - "conda create -p venv python==3.7.1 -y"
+
+
+2. Setup the setup.py file: - 
+
+imported 2 modules from setuptools library.  
+find_packages() → Automatically searches your project directory and 
+collects all valid Python packages, so you don’t have to list them manually.
+
+setup() → The main function from setuptools that defines your package’s 
+metadata (name, version, author, dependencies, etc.) and instructions for how it should be built/installed.
+
+Then made a function to import packages names in a list (-e . there refers the txt file package names to setup.py file).
+Then used command "pip install -r req.txt" to execute, cause -e . will take us to setup.py file.
+Then defined Exception and logging
+
+
+3. Then i developed code for ETL.
+
+I took my csv, performed proper transformations and then convrted to json file format. 
+Then i pushed them to mongo db in push_data.py file.
+I had to go to mongo db and add ip (in cluster 0 part). Then i was able to push through.
+
+4. I made ingestion Configuration
+
+In folder, constants, i made it a module using __init__ and then inside that file itself, i put ingestion constants
+This includes feature(raw) file name, train/test file name, all of these 3 files path.
+Along with collection/database name and many more things.
+
+Then inside entity folder, i made a file 'entity_config' and wrote code to
+~ Make all the constants avaliable to entire code through making classes and made paths for them for reference as well.
+
+
+
+5. I made Data ingestion
+
+This was done inside folder 'components'; i made a class-metods for 
+~ Imported all data from MongoDB and converted it into pandas dataframe. (removed the '_id' column.)
+~ I saved that raw file inside the specified path.
+~ Used train-test-split to split the data into 2 smaller files and saving them.
+~Final method was to call this class and execute all this code.
+
+ALong with 'entity config', i made 'artificat config'; where i specified to get the path ofthe saved train and test files 
+as string. 
+I called this finally in ingestion later on in execution part.
+
+6. main.py
+
+outside the Retail folder, i made another file with the name main.py,
+i imported all the relevant libraries there and wrote a code to execute the entire code ingestion pipeline.

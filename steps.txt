@@ -51,7 +51,7 @@ This was done inside folder 'components'; i made a class-metods for
 ~ Imported all data from MongoDB and converted it into pandas dataframe. (removed the '_id' column.)
 ~ I saved that raw file inside the specified path.
 ~ Used train-test-split to split the data into 2 smaller files and saving them.
-~Final method was to call this class and execute all this code.
+~ Final method was to call this class and execute all this code.
 
 ALong with 'entity config', i made 'artificat config'; where i specified to get the path ofthe saved train and test files 
 as string. 

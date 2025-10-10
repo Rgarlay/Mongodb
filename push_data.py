@@ -50,7 +50,7 @@ class push_data:
             raise CustomException(e,sys)
         
 if __name__ == "__main__":
-    collection = 'Session 3'
+    collection = 'Session_3'
     database = "CSV_FILE"
     new_insertion = push_data()
     file_path = r'archieve\Retail Sales Analysis.csv'

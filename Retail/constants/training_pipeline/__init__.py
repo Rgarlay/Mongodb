@@ -13,7 +13,7 @@ PIPELINE_NAME: str = 'Retail Sales'
 
 
 '''
-Some constant of Data Ingestion. They start with DATA_INGESTION
+Constant of Data Ingestion part in pipeline. They start with DATA_INGESTION
 '''
 DATA_INGESTION_COLLECTION_NAME: str = 'Session_3'
 DATA_INGESTION_DATABASE_NAME: str = 'CSV_FILE'
@@ -23,3 +23,16 @@ DATA_INGESTION_FEATURE_STORE: str = 'feature_store'            #FILE PULLED FROM
 DATA_INGESTION_DATA_INGESTED: str = 'ingested'                 # TRAIN/TEST FILES WILL BE HERE
 
 
+'''
+Constants of Data Validation part in pipeline. They start with DATA_VALIDATION
+'''
+DATA_VALIDATION_DIR_NAME: str = 'data_validation'
+DATA_VALIDATION_VALID_DIR: str = 'valid'
+DATA_VALIDATION_INVALID_DIR: str = 'Invalid'
+DATA_VALIDATION_DRIFT_REPORT_DIR: str = 'drift_report'
+DATA_VALIDATION_DRIFT_REPORT_FILE_NAME: str = 'drift_report.yaml'
+
+
+import os,sys
+
+SCHEMA_FILE_PATH: str = os.path.join('data_schema','schema.yaml')

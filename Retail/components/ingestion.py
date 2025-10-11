@@ -19,6 +19,8 @@ class DataIngestion:
     def __init__ (self, data_ingestion_config: DataIngestionConfig):
         try:
             self.data_ingestion_config = data_ingestion_config
+            logging.info("DataIngestion initialized with provided DataIngestionConfig.")
+
         except Exception as e:
             raise CustomException(e,sys)
         
@@ -34,6 +36,7 @@ class DataIngestion:
                                                         connectTimeoutMS=60000,
                                                         socketTimeoutMS=600000)
 
+            logging.info("MongoDB connection established successfully.")
             database_name = self.data_ingestion_config.database_name
             logging.info(f'The name of the database is {database_name}')
 
@@ -48,6 +51,7 @@ class DataIngestion:
             if '_id' in dataframe.columns:
                 dataframe.drop(columns = ['_id'],inplace=True)
 #                logging.info({type(dataframe)})
+            
             return dataframe
         except Exception as e:
             raise CustomException(e,sys)
@@ -55,10 +59,12 @@ class DataIngestion:
 
     def data_export_to_feature_store(self,dataframe:pd.DataFrame):
         try:
+            logging.info("Exporting data to feature store initiated.")
             feature_store_dir_name = self.data_ingestion_config.feature_store_name
             dir_path = os.path.dirname(feature_store_dir_name)
             os.makedirs(dir_path,exist_ok=True)
             dataframe.to_csv(feature_store_dir_name,index=False,header=True)
+            
             return dataframe      
         except Exception as e:
             raise CustomException(e,sys)
@@ -83,14 +89,19 @@ class DataIngestion:
     
     def initiate_data_ingestion(self):
         try:
+            logging.info("Data ingestion process initiated.")
+
             dataframe_1 = self.import_and_convert()
             dataframe_2 = self.data_export_to_feature_store(dataframe_1)
             self.df_train_test_split(dataframe_2)
 
             self.df_train_test_split(dataframe_2)
+            logging.info("DataIngestionArtifact created and returned successfully.")
 
             data_ingestion_output = DataIngestionArtifact(train_file_path = self.data_ingestion_config.train_file_path,
                                                           test_file_path = self.data_ingestion_config.test_file_path)
+            
+            return data_ingestion_output
         except Exception as e:
             raise CustomException(e,sys)
         

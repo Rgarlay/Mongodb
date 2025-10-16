@@ -36,28 +36,35 @@ I had to go to mongo db and add ip (in cluster 0 part). Then i was able to push 
 
 4. I made ingestion Configuration
 
-In folder, constants, i made it a module using __init__ and then inside that file itself, i put ingestion constants
-This includes feature(raw) file name, train/test file name, all of these 3 files path.
-Along with collection/database name and many more things.
+I had a folder named "constants". There i made a folder called "training_pipeline".
+There, inside, i created an __init__.py file.
+This will serve the purpose of holding all the constants within the code.
+First of all, i included data ingestion constants. They are some folder names and file names.
+Some general constants such as train_test_split_ratio also is there, along with mongodb addresses of my data.
 
-Then inside entity folder, i made a file 'entity_config' and wrote code to
-~ Make all the constants avaliable to entire code through making classes and made paths for them for reference as well.
-
-
+In order to connect all this to my data ingestion code, i had another folder called "entity".
+This folder served the purpose of all the configuration of the my entity and artifact(output fro a step).
+Here, i joined paths with files, folders with folders. All this is done to give data_ingestion reference to constants
+along with their referenced place in dir.
 
 5. I made Data ingestion
 
-This was done inside folder 'components'; i made a class-metods for 
 ~ Imported all data from MongoDB and converted it into pandas dataframe. (removed the '_id' column.)
+
 ~ I saved that raw file inside the specified path.
+
 ~ Used train-test-split to split the data into 2 smaller files and saving them.
+
 ~ Final method was to call this class and execute all this code.
 
 ALong with 'entity config', i made 'artificat config'; where i specified to get the path ofthe saved train and test files 
-as string. 
+as string. I will use this later on as input to data validation.
+
 I called this finally in ingestion later on in execution part.
 
 6. main.py
 
 outside the Retail folder, i made another file with the name main.py,
 i imported all the relevant libraries there and wrote a code to execute the entire code ingestion pipeline.
+
+

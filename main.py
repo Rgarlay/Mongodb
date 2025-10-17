@@ -1,16 +1,17 @@
 from Retail.exception.exception import CustomException
 from Retail.logging.logger import logging
 
-#from Retail.entity.config_artifact import DataIngestionArtifact,DataValidationArtifact
+from Retail.entity.entity_config import (DataIngestionConfig,
+                                         TrainingConfig,
+                                         DataValidationConfig,
+                                         DataTransformationConfig,
+                                         ModelTrainerConfig)
+
 
 from Retail.components.ingestion import DataIngestion
 from Retail.components.validation import DataValidation
-from Retail.entity.entity_config import DataIngestionConfig,TrainingConfig,DataValidationConfig,DataTransformationConfig
 from Retail.components.transformation import DataTransformation
-
-
-
-
+from Retail.components.trainer import ModelTrainer
 
 
 import os, sys
@@ -37,7 +38,15 @@ if __name__ == "__main__":
                                                 data_validation_artifact=validation_config)
         
         transformation_config = data_transformation.initiate_data_transformation()
-        print(transformation_config)
+
+        logging.info('Model Training has begun.')
+        model_trainer_config = ModelTrainerConfig(training_config)
+        model_trainer = ModelTrainer(model_trainer_config=model_trainer_config,
+                                     data_transformation_artifact=transformation_config)
+        
+        trainer_config = model_trainer.initiate_model_training()
+
+        print(trainer_config)
 
     except Exception as e:
         raise CustomException(e,sys)

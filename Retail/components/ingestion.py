@@ -47,7 +47,7 @@ class DataIngestion:
             logging.info(f'The number of record in collections is {len(list(collection.find()))}')
 
             dataframe = pd.DataFrame(list(collection.find()))
-            cols_to_drop = ['transactions_id','customer_id', 'sale_date','sale_time']
+            cols_to_drop = ['transactions_id','customer_id', 'sale_date','sale_time','index']
 
             dataframe.drop(columns = cols_to_drop, inplace=True)
 

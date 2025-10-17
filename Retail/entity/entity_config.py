@@ -48,18 +48,26 @@ class DataValidationConfig:
                                                  ,training_pipeline.DATA_VALIDATION_DRIFT_REPORT_DIR)
         
 
-
 class DataTransformationConfig:
-    def __init__(self, trainin_pipeline_config: TrainingConfig):
-        self.data_transformation_dir:str =  os.path.join(trainin_pipeline_config.artifact_dir, training_pipeline.DATA_TRANSFORMATION_DIR_NAME)
-        
+    def __init__(self, training_pipeline_config: TrainingConfig):
+        self.data_transformation_dir:str =  os.path.join(training_pipeline_config.artifact_dir, 
+                                                         training_pipeline.DATA_TRANSFORMATION_DIR_NAME)
         self.transformed_train_file_path: str =  os.path.join(self.data_transformation_dir, 
                                                   training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR, 
                                                   training_pipeline.TRAIN_FILE_NAME.replace("csv", "npy"),)
         self.transformed_test_file_path: str =  os.path.join(self.data_transformation_dir,
                                                  training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR, 
-                                                  training_pipeline.TEST_FILE_NAME.replace('csv','npy'), )
-        self.trained_obj_file_path = os.path.join(self.data_transformation_dir,
-                                                  training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_OBJ_DIR, 
+                                                  training_pipeline.TEST_FILE_NAME.replace('csv','npy'), )      ##can remove comma
+        self.trained_obj_file_path = os.path.join(self.data_transformation_dir,                                 ##it just makes the 
+                                                  training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_OBJ_DIR,    ##bracket a tuple.
                                                   training_pipeline.PREPROCESSING_OBJECT_FILE_NAME,)
 
+class ModelTrainerConfig:
+    def __init__(self, training_pipeline_config: TrainingConfig):
+
+        self.model_train_dir: str = os.path.join(training_pipeline_config.artifact_dir, training_pipeline.MODEL_TRAINER_DIR_NAME)
+        self.trained_model_file_path: str = os.path.join(self.model_train_dir,
+                                                    training_pipeline.MODEL_TRAINER_TRAINED_MODEL_DIR_NAME,
+                                                    training_pipeline.MODEL_TRAINER_MODEL_NAME)
+        self.expected_accuracy: float = training_pipeline.MODEL_TRAINER_EXPECTED_SCORE
+        self.overfitting_underfitting_threshold: float = training_pipeline.MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD

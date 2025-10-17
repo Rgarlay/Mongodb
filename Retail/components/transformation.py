@@ -93,16 +93,19 @@ class DataTransformation:
             input_test_data_transformed = pd.concat([transformed_test_data,test_data_OHE], axis = 1)
             logging.info(f"Transformed train shape: {input_train_data_transformed.shape}, "
                          f"test shape: {input_test_data_transformed.shape}")
-
-            ##Splitted the train-test data column speperately.
-            input_feature_train_df = train_data.drop(columns= [TARGET_COLUMN])
-            input_feature_train_df = train_data[TARGET_COLUMN]
             
-            input_feature_test_df = test_data.drop(columns= [TARGET_COLUMN])
-            input_feature_test_df = test_data[TARGET_COLUMN]
+            ##Splitted the train-test data column speperately.
+            input_feature_train_df = input_train_data_transformed.drop(columns= [TARGET_COLUMN])
+            input_target_target_df = input_train_data_transformed[TARGET_COLUMN]
+            
+            input_feature_test_df = input_test_data_transformed.drop(columns= [TARGET_COLUMN])
+            input_target_test_df = input_test_data_transformed[TARGET_COLUMN]
 
-            train_arr=np.c_[input_train_data_transformed.to_numpy(),np.array(input_feature_train_df)]
-            test_arr=np.c_[input_test_data_transformed.to_numpy(),np.array(input_feature_test_df)]
+            logging.info(f'test train feature == {input_feature_train_df.columns}')
+            logging.info(f'test test feature == {input_feature_test_df.columns}')
+
+            train_arr=np.c_[input_feature_train_df.to_numpy(),np.array(input_target_target_df)]
+            test_arr=np.c_[input_feature_test_df.to_numpy(),np.array(input_target_test_df)]
             logging.info(f"Final NumPy arrays created: Train shape {train_arr.shape}, Test shape {test_arr.shape}")
 
             save_numpy_obj(object_to_save=train_arr, file_path=self.data_transformation_config.transformed_train_file_path)

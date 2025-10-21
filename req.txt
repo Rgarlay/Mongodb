@@ -8,5 +8,6 @@ scikit-learn
 scipy
 dill
 PyYAML
-pickle-mixin
+mlflow
+
 -e .

@@ -47,24 +47,30 @@ This folder served the purpose of all the configuration of the my entity and art
 Here, i joined paths with files, folders with folders. All this is done to give data_ingestion reference to constants
 along with their referenced place in dir.
 
-5. I made Data ingestion
+5. Data ingestion
 
+~ We imported entity_config and training_pipeline dir __init__ file. Both of them have all the required constants.
+
+    In the DataIngestion class, i
 ~ Imported all data from MongoDB and converted it into pandas dataframe. (removed the '_id' column.)
 
-~ I saved that raw file inside the specified path.
+~ I saved that raw(feature) file inside the specified path.
 
 ~ Used train-test-split to split the data into 2 smaller files and saving them.
 
-~ Final method was to call this class and execute all this code.
+~ Final method included calling all of these methods and execute all this code.
 
-ALong with 'entity config', i made 'artificat config'; where i specified to get the path ofthe saved train and test files 
-as string. I will use this later on as input to data validation.
+I made 'artificat config'; where i specified the information i need out of data ingestion, for the data_validation part.
 
-I called this finally in ingestion later on in execution part.
+This was the path of the saved train and test files as string.
 
 6. main.py
 
 outside the Retail folder, i made another file with the name main.py,
-i imported all the relevant libraries there and wrote a code to execute the entire code ingestion pipeline.
+i imported all the relevant libraries there and wrote a code to execute the ingestion pipeline. 
+
+If this checked out properly. I went to next step, which was to create data_validation.
+
+
 
 

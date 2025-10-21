@@ -20,6 +20,8 @@ from sklearn.ensemble import (
     RandomForestRegressor
 )
 
+import mlflow
+
 class ModelTrainer:
     def __init__(self, data_transformation_artifact: DataTransformationArtifact,
                  model_trainer_config: ModelTrainerConfig):
@@ -28,6 +30,17 @@ class ModelTrainer:
             self.data_transformation_artifact = data_transformation_artifact
             self.model_trainer_config = model_trainer_config
             logging.info("ModelTrainer initialized successfully.")
+        except Exception as e:
+            raise CustomException(e,sys)
+
+
+    def track_mlflow(self, bestmodel,classification_metric):
+        try:
+            with mlflow.start_run():
+                mlflow.log_metric('r2_score',classification_metric.r2_score)
+                mlflow.log_metric('rmse',classification_metric.root_mean_squared_error)
+                mlflow.log_metric('mae',classification_metric.mean_absolute_error)
+                mlflow.sklearn.log_model(bestmodel,name = 'model')
         except Exception as e:
             raise CustomException(e,sys)
 
@@ -47,16 +60,16 @@ class ModelTrainer:
 
             params = {
                 "Random Forest": {
-                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                    'n_estimators': [8, 16, 32, 128, 256]
                 },
                 "Gradient Boosting": {
-                    'learning_rate': [0.1, 0.01, 0.05, 0.001]
+                    'learning_rate': [0.1, 0.01, 0.05]
                 },
                 "Linear Regression": {
                     'fit_intercept': [True, False]
                 },
                 "AdaBoost": {
-                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                    'n_estimators': [8, 16, 32, 64, 256]
                 }
         }
             
@@ -77,12 +90,19 @@ class ModelTrainer:
             logging.info(f"Best model selected: {best_model_name} with score {best_model_score}")
 
             y_train_pred = best_model.predict(x_train)
+
             y_test_pred = best_model.predict(x_test)
 
+        
             logging.info("Predictions generated for training and testing sets.")
 
             classification_train_metrics = get_classification_score(y_test=y_train, y_pred=y_train_pred)
+            
+            self.track_mlflow(bestmodel=best_model,classification_metric=classification_train_metrics)
+
             classification_test_metrics = get_classification_score(y_test=y_test, y_pred=y_test_pred)
+
+            self.track_mlflow(bestmodel=best_model,classification_metric=classification_test_metrics)
 
             logging.info("Classification metrics calculated for train and test sets.")
 

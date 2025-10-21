@@ -22,6 +22,9 @@ from sklearn.ensemble import (
 
 import mlflow
 
+import dagshub
+dagshub.init(repo_owner='Rgarlay', repo_name='Mongodb', mlflow=True)
+
 class ModelTrainer:
     def __init__(self, data_transformation_artifact: DataTransformationArtifact,
                  model_trainer_config: ModelTrainerConfig):
@@ -36,11 +39,12 @@ class ModelTrainer:
 
     def track_mlflow(self, bestmodel,classification_metric):
         try:
+            mlflow.set_tracking_uri("https://dagshub.com/Rgarlay/Mongodb.mlflow")
             with mlflow.start_run():
                 mlflow.log_metric('r2_score',classification_metric.r2_score)
                 mlflow.log_metric('rmse',classification_metric.root_mean_squared_error)
                 mlflow.log_metric('mae',classification_metric.mean_absolute_error)
-                mlflow.sklearn.log_model(bestmodel,name = 'model')
+                mlflow.sklearn.log_model(bestmodel,'model')
         except Exception as e:
             raise CustomException(e,sys)
 

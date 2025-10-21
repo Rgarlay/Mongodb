@@ -9,5 +9,5 @@ scipy
 dill
 PyYAML
 mlflow
-
+dagshub
 -e .

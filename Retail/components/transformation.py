@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 from sklearn.impute import KNNImputer   
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.compose import ColumnTransformer
 
 from Retail.exception.exception import CustomException
 from Retail.logging.logger import logging
@@ -33,13 +35,28 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e,sys)
         
-    def get_data_transformer(dataframe):
+    def get_data_transformer(cls):
         try:
-
             ##Numerical transformations
-            Knn_imputer = KNNImputer(**DATA_TRANSFORMATION_IMPUTE_PARAMS)
-            processor = Pipeline([('imputer',Knn_imputer)])
+            num_imputer = KNNImputer(**DATA_TRANSFORMATION_IMPUTE_PARAMS)
+            num_scaler = StandardScaler()
+
+            num_cols = ['age','quantiy','price_per_unit','cogs']
+            cat_cols = ['is_male','category']
+            
+            num_process = Pipeline([('impute',num_imputer),
+                                    ('num_scaling',num_scaler)])
+            
+            cat_process = Pipeline([('onehot', OneHotEncoder(drop='first', handle_unknown='ignore'))
+                                    ])
+
+            processor = ColumnTransformer([('num_pipeline',num_process,num_cols),
+                                           
+                                           ('cat pipeline',cat_process,cat_cols)],
+                                           remainder='passthrough')
+    
             logging.info("KNNImputer pipeline created successfully.")
+                        
             return processor
         except Exception as e:
             raise CustomException(e,sys)
@@ -52,65 +69,45 @@ class DataTransformation:
             logging.info(f'The columns in train_data are {train_data.columns}')
             logging.info(f'The columns in train_data are {test_data.columns}')
 
+            train_data = train_data.dropna(subset=[TARGET_COLUMN])
+            test_data = test_data.dropna(subset=[TARGET_COLUMN])
+
             ## Did the mapping of Gender as Male -> 1; Female -> 0.
-            logging.info("Mapping gender column: Male -> 1, Female -> 0")
-            train_data['is_male'] = train_data['is_male'].apply(lambda x: 1 if x == 'Male' else 0)
-            test_data['is_male'] = test_data['is_male'].apply(lambda x: 1 if x=='Male' else 0)
+            input_feature_train_df = train_data.drop(columns=[TARGET_COLUMN])
+            input_target_train_df = train_data[TARGET_COLUMN]
 
-            ##Doing the imputations
+            input_feature_test_df = test_data.drop(columns=[TARGET_COLUMN])
+            input_target_test_df = test_data[TARGET_COLUMN]
 
-                ##Splitting numerical columns
-            logging.info("Selecting numerical columns for imputation...")    
-            train_data_numerical = train_data.select_dtypes(include = 'number')
-            test_data_numerical = test_data.select_dtypes(include = 'number')
-
-                ## applying knninputer onto it.
-            logging.info("Applying KNN imputer to numerical columns...")
+            # Get preprocessor and fit
             preprocessor = self.get_data_transformer()
-            preprocessor_obj = preprocessor.fit(train_data_numerical)
+            preprocessor_obj = preprocessor.fit(input_feature_train_df)
 
-            transformed_train_data_np = preprocessor_obj.transform(train_data_numerical)
-            transformed_train_data = pd.DataFrame(transformed_train_data_np,columns=train_data_numerical.columns)
+            # Transform features only
+            transformed_train_features = preprocessor_obj.transform(input_feature_train_df)
+            transformed_test_features = preprocessor_obj.transform(input_feature_test_df)
 
-            transformed_test_data_np = preprocessor_obj.transform(test_data_numerical)
-            transformed_test_data = pd.DataFrame(transformed_test_data_np,columns=test_data_numerical.columns)
+            # Combine transformed features with target
+            train_arr = np.c_[transformed_train_features, input_target_train_df.to_numpy()]
+            test_arr = np.c_[transformed_test_features, input_target_test_df.to_numpy()]
+
             logging.info("Transformed numerical data converted back to DataFrame.")
 
             ##Performing the categorical transformation
             logging.info(f"Performing One-Hot Encoding on columns: {CATEGORICAL_COL_TO_OHE}")
-            train_data_obj = train_data[CATEGORICAL_COL_TO_OHE]
-            test_data_obj = test_data[CATEGORICAL_COL_TO_OHE]
-
-            train_data_OHE = pd.get_dummies(data =train_data_obj, 
-                                            columns=[CATEGORICAL_COL_TO_OHE],
-                                              dtype = int, drop_first=True)
-            
-            test_data_OHE = pd.get_dummies(data =test_data_obj, 
-                                            columns=[CATEGORICAL_COL_TO_OHE],
-                                              dtype = int, drop_first=True)
-
-            input_train_data_transformed = pd.concat([transformed_train_data,train_data_OHE], axis = 1)
-            input_test_data_transformed = pd.concat([transformed_test_data,test_data_OHE], axis = 1)
-            logging.info(f"Transformed train shape: {input_train_data_transformed.shape}, "
-                         f"test shape: {input_test_data_transformed.shape}")
             
             ##Splitted the train-test data column speperately.
-            input_feature_train_df = input_train_data_transformed.drop(columns= [TARGET_COLUMN])
-            input_target_target_df = input_train_data_transformed[TARGET_COLUMN]
-            
-            input_feature_test_df = input_test_data_transformed.drop(columns= [TARGET_COLUMN])
-            input_target_test_df = input_test_data_transformed[TARGET_COLUMN]
 
-            logging.info(f'test train feature == {input_feature_train_df.columns}')
-            logging.info(f'test test feature == {input_feature_test_df.columns}')
+            # logging.info(f'test train feature == {input_feature_train_df.columns}')
+            # logging.info(f'test test feature == {input_feature_test_df.columns}')
 
-            train_arr=np.c_[input_feature_train_df.to_numpy(),np.array(input_target_target_df)]
-            test_arr=np.c_[input_feature_test_df.to_numpy(),np.array(input_target_test_df)]
             logging.info(f"Final NumPy arrays created: Train shape {train_arr.shape}, Test shape {test_arr.shape}")
 
             save_numpy_obj(object_to_save=train_arr, file_path=self.data_transformation_config.transformed_train_file_path)
             save_numpy_obj(object_to_save=test_arr, file_path=self.data_transformation_config.transformed_test_file_path)
             save_obj(obj_to_save=preprocessor, file_path=self.data_transformation_config.trained_obj_file_path)
+
+            save_obj(file_path="final_obj/preprocessor.pkl",obj_to_save=preprocessor)
             
             data_tranformation_artifact = DataTransformationArtifact(transformed_obj_file_path=self.data_transformation_config.trained_obj_file_path,
                                                                     train_obj_file_path=self.data_transformation_config.transformed_train_file_path,

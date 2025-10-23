@@ -10,7 +10,7 @@ from Retail.exception.exception import CustomException
 from Retail.logging.logger import logging
 
 from Retail.constants.training_pipeline import TARGET_COLUMN,DATA_TRANSFORMATION_IMPUTE_PARAMS
-from Retail.constants.training_pipeline import DATA_TRANSFORMATION_IMPUTE_PARAMS, GENDER_COLUMN_TO_MAP, CATEGORICAL_COL_TO_OHE
+from Retail.constants.training_pipeline import DATA_TRANSFORMATION_IMPUTE_PARAMS, CATEGORICAL_COL_TO_OHE
 from Retail.constants.training_pipeline import  CATEGORICAL_COL_TO_OHE
 
 from Retail.entity.config_artifact import DataTransformationArtifact,DataValidationArtifact
@@ -68,9 +68,6 @@ class DataTransformation:
 
             logging.info(f'The columns in train_data are {train_data.columns}')
             logging.info(f'The columns in train_data are {test_data.columns}')
-
-            train_data = train_data.dropna(subset=[TARGET_COLUMN])
-            test_data = test_data.dropna(subset=[TARGET_COLUMN])
 
             ## Did the mapping of Gender as Male -> 1; Female -> 0.
             input_feature_train_df = train_data.drop(columns=[TARGET_COLUMN])

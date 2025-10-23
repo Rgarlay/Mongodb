@@ -8,9 +8,12 @@ __pycache__/
 
 # Distribution / packaging
 
+Tutorial_tools
 first_experiment.ipynb
 trial.ipynb
 mlruns/
+
+
 .Python
 build/
 develop-eggs/

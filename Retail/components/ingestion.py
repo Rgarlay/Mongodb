@@ -2,12 +2,14 @@ from Retail.exception.exception import CustomException
 from Retail.logging.logger import logging
 from Retail.entity.entity_config import DataIngestionConfig
 from Retail.entity.config_artifact import DataIngestionArtifact
+from Retail.constants.training_pipeline import TARGET_COLUMN
 
 import pandas as pd
 import numpy as np
 import json
 import sys, os
 from dotenv import load_dotenv
+
 
 import pymongo
 from sklearn.model_selection import train_test_split
@@ -82,6 +84,9 @@ class DataIngestion:
             
             dir_name = os.path.dirname(self.data_ingestion_config.train_file_path)
             os.makedirs(dir_name,exist_ok=True)
+
+            train_data = train_data.dropna(subset=[TARGET_COLUMN])
+            test_data = test_data.dropna(subset=[TARGET_COLUMN])
 
             train_data.to_csv(self.data_ingestion_config.train_file_path,header=True, index=False)
             logging.info(f'The Train data has been saved. Length of dataframe: - {len(train_data)}')

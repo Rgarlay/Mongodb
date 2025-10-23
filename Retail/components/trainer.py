@@ -19,10 +19,11 @@ from sklearn.ensemble import (
     GradientBoostingRegressor,
     RandomForestRegressor
 )
-
 import mlflow
-
 import dagshub
+
+
+
 dagshub.init(repo_owner='Rgarlay', repo_name='Mongodb', mlflow=True)
 
 
@@ -33,6 +34,8 @@ class ModelTrainer:
             logging.info("Initializing ModelTrainer...")
             self.data_transformation_artifact = data_transformation_artifact
             self.model_trainer_config = model_trainer_config
+
+
             logging.info("ModelTrainer initialized successfully.")
         except Exception as e:
             raise CustomException(e,sys)
@@ -137,8 +140,6 @@ class ModelTrainer:
             return model_trainer_artifact
         except Exception as e:
             raise CustomException(e,sys)        
-
-
 
     def initiate_model_training(self):
         try:

@@ -63,3 +63,6 @@ MODEL_TRAINER_MODEL_NAME: str = 'model.pkl'
 MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
 MODEL_TRAINER_OVERFITTING_UNDERFITTING_THRESHOLD: str = 0.05
 
+'''Cloud Constants'''
+
+AWS_BUCKET_NAME:str = 'aws-retail-sales-project-local'

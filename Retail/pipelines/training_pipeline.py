@@ -3,12 +3,11 @@ from Retail.exception.exception import CustomException
 from Retail.logging.logger import logging
 
 from Retail.entity.entity_config import (
-    training_pipeline,
+    TrainingConfig,
     DataIngestionConfig,
     DataTransformationConfig,
     DataValidationConfig,
-    ModelTrainerConfig,
-    TrainingConfig
+    ModelTrainerConfig
     )
 from Retail.entity.config_artifact import (ModelTrainerArtifact,
                                            DataIngestionArtifact,
@@ -20,11 +19,15 @@ from Retail.components.validation import DataValidation,DataValidationArtifact
 from Retail.components.transformation import DataTransformation, DataValidationArtifact
 from Retail.components.trainer import ModelTrainer,ModelTrainerArtifact
 
+from Retail.cloud.s3_syncer import s3Sync
+from Retail.constants.training_pipeline import AWS_BUCKET_NAME
+
 
 class TrainingPipeline:
     def __init__ (self):
         try:
-            self.training_pipeline_config: str = TrainingConfig()
+            self.training_pipeline_config = TrainingConfig()
+            self.sync_to_s3 = s3Sync()
         except Exception as e:
             raise CustomException(e,sys)
     
@@ -74,6 +77,23 @@ class TrainingPipeline:
             return model_training_artifact
         except Exception as e:
             raise CustomException(e,sys)
+        
+    def sync_artifact_to_s3(self):
+        try:
+            aws_bucket_url = f"s3://{AWS_BUCKET_NAME}/artifact/{self.training_pipeline_config.timestamp}"
+            self.sync_to_s3.sync_folder_to_s3(folder = self.training_pipeline_config.artifact_dir,
+                                                                    aws_s3_bucket_url=aws_bucket_url)
+        except Exception as e:
+            raise CustomException(e,sys)
+
+    def sync_saved_model_to_s3(self):
+        try:
+            aws_bucket_url = f"s3://{AWS_BUCKET_NAME}/final_obj/{self.training_pipeline_config.timestamp}"
+            self.sync_to_s3.sync_folder_to_s3(folder = self.training_pipeline_config.model_dir,
+                                                                    aws_s3_bucket_url=aws_bucket_url)
+        except Exception as e:
+            raise CustomException(e,sys)
+
 
     def run_pipeline(self):
         try:
@@ -81,6 +101,8 @@ class TrainingPipeline:
             data_validation_artifact = self.initiate_data_validation(data_ingestion_artifact=data_ingestion_artifact)
             data_transformation_artifact = self.initiate_data_transformation(data_validation_artifact=data_validation_artifact)
             model_trainer_artifact = self.initiate_model_training(data_transformation_artifact=data_transformation_artifact)
+            self.sync_artifact_to_s3()
+            self.sync_saved_model_to_s3()
 
             return model_trainer_artifact
         except Exception as e:

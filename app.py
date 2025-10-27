@@ -10,6 +10,10 @@ import numpy as np
 from dotenv import load_dotenv
 load_dotenv()
 
+mongo_db_url = os.getenv("uri")
+client = pymongo.MongoClient(mongo_db_url)
+
+from uvicorn import run as app_run
 from Retail.pipelines.training_pipeline import TrainingPipeline
 from Retail.utils.main_utils.utils import import_obj
 from Retail.utils.ml_utils.model.estimator import RetailModel
@@ -20,6 +24,17 @@ from fastapi import FastAPI,File, UploadFile,Request
 
 from fastapi.templating import Jinja2Templates
 templates = Jinja2Templates(directory="./templates")
+
+import dagshub
+
+dagshub.init(
+    repo_owner='Rgarlay',
+    repo_name='Mongodb',
+    mlflow=True
+)
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("DAGSHUB_USERNAME")
+os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_USER_TOKEN")
 
 
 app = FastAPI()
@@ -53,6 +68,6 @@ def predict_route(request: Request,file: UploadFile = File(...)):
         raise CustomException(e,sys)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host = '0.0.0.0', port = 8000)
+    app_run(app, host = '0.0.0.0', port = 8000)
 
     

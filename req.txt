@@ -1,7 +1,7 @@
 pandas
 numpy
 ipykernel
-pymongo[srv]==3.6
+pymongo[srv]
 certifi
 dotenv
 scikit-learn

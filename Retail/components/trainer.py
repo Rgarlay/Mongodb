@@ -24,7 +24,7 @@ import dagshub
 
 
 
-dagshub.init(repo_owner='Rgarlay', repo_name='Mongodb', mlflow=True)
+#dagshub.init(repo_owner='Rgarlay', repo_name='Mongodb', mlflow=True)
 
 
 class ModelTrainer:
@@ -41,16 +41,16 @@ class ModelTrainer:
             raise CustomException(e,sys)
 
 
-    def track_mlflow(self, bestmodel,classification_metric):
-        try:
-            mlflow.set_tracking_uri("https://dagshub.com/Rgarlay/Mongodb.mlflow")
-            with mlflow.start_run():
-                mlflow.log_metric('r2_score',classification_metric.r2_score)
-                mlflow.log_metric('rmse',classification_metric.root_mean_squared_error)
-                mlflow.log_metric('mae',classification_metric.mean_absolute_error)
-                #mlflow.sklearn.log_model(bestmodel,"model")
-        except Exception as e:
-            raise CustomException(e,sys)
+    # def track_mlflow(self, bestmodel,classification_metric):
+    #     try:
+    #         mlflow.set_tracking_uri("https://dagshub.com/Rgarlay/Mongodb.mlflow")
+    #         with mlflow.start_run():
+    #             mlflow.log_metric('r2_score',classification_metric.r2_score)
+    #             mlflow.log_metric('rmse',classification_metric.root_mean_squared_error)
+    #             mlflow.log_metric('mae',classification_metric.mean_absolute_error)
+    #             #mlflow.sklearn.log_model(bestmodel,"model")
+    #     except Exception as e:
+    #         raise CustomException(e,sys)
 
     def train_model(self, x_train,x_test,y_train,y_test):
         try:
@@ -106,11 +106,11 @@ class ModelTrainer:
 
             classification_train_metrics = get_classification_score(y_test=y_train, y_pred=y_train_pred)
             
-            self.track_mlflow(bestmodel=best_model,classification_metric=classification_train_metrics)
+#            self.track_mlflow(bestmodel=best_model,classification_metric=classification_train_metrics)
 
             classification_test_metrics = get_classification_score(y_test=y_test, y_pred=y_test_pred)
 
-            self.track_mlflow(bestmodel=best_model,classification_metric=classification_test_metrics)
+#            self.track_mlflow(bestmodel=best_model,classification_metric=classification_test_metrics)
 
             logging.info("Classification metrics calculated for train and test sets.")
 

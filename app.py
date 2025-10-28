@@ -25,17 +25,6 @@ from fastapi import FastAPI,File, UploadFile,Request
 from fastapi.templating import Jinja2Templates
 templates = Jinja2Templates(directory="./templates")
 
-import dagshub
-
-dagshub.init(
-    repo_owner='Rgarlay',
-    repo_name='Mongodb',
-    mlflow=True
-)
-
-os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("DAGSHUB_USERNAME")
-os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_USER_TOKEN")
-
 
 app = FastAPI()
 

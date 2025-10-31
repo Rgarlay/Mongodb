@@ -49,9 +49,10 @@ along with their referenced place in dir.
 
 5. Data ingestion
 
-~ We imported entity_config and training_pipeline dir __init__ file. Both of them have all the required constants.
+~ We imported "entity_config" and "training_pipeline" dir __init__ file. Both of them have all the required constants.
 
     In the DataIngestion class, i
+
 ~ Imported all data from MongoDB and converted it into pandas dataframe. (removed the '_id' column.)
 
 ~ I saved that raw(feature) file inside the specified path.
@@ -61,15 +62,125 @@ along with their referenced place in dir.
 ~ Final method included calling all of these methods and execute all this code.
 
 I made 'artificat config'; where i specified the information i need out of data ingestion, for the data_validation part.
-
 This was the path of the saved train and test files as string.
 
-6. main.py
+(I ran a quick main.py check to see if everything was in order.)
 
-outside the Retail folder, i made another file with the name main.py,
-i imported all the relevant libraries there and wrote a code to execute the ingestion pipeline. 
+6. Data Validation: - 
 
-If this checked out properly. I went to next step, which was to create data_validation.
+A DATA_VALIDATION prefix having constant was prepared that included the final paths and file names etc.
+
+In entity_config; we made a data_validation_config where we connected all above contants and dirs etc.
+
+    In Data Validation pipeline: - 
+
+~ "Data Validation config" and "Data Ingestion Artifact" are imported.
+
+~ A ".yaml" file is made in a folder "data_schema", which contains all the 
+    ==> Data Column types
+    ==> Number of numerical columns
+
+~ Then we read our ingestion output(base_df ==> train and current_file ==> test file).
+  We compared base and current dataframees to see whether both of the dataframe have same 2 properties above.
+  On basis of that, we generated a report called "drift_report", which is only made when there's discripency.
+
+~ Made a method to access this. Then after checking, make a "data_validation_artifact", which includes all the
+  relevant information.
+
+Run a main.py check to see if everything's in order.
+
+7. Data Transformation: - 
+
+We made a contants file and in 'entity_config', we made a method to connect paths.
+
+ In Transformation pipeline
+
+~ Import "training_config" and "data_validation_artifact".
+
+~ Make a method for all the transformations on numerical and non-numerical columns and put them all in a single obj.
+
+~ Make another method to implement.
+    ==> First drop the irrelevant columns and do little needed adjustements.
+    ==> Apply the pipeline and save the obj with features-targets in a "numpy_c." file.
+
+~ Save the preprocessor that we just outputted.
+
+Now, include all future-needed information in the trainer_artifact.
+
+8. Model Training: - 
+
+Same first 2 constants making and model_training. 
+
+For this==> Make a new utils_file inside ml_utils that supplies with metric calculated on data 
+            and a preprocessor + selected model object.
+
+Make 2 dictionairs, one with models and one with their hyperparameters.
+And we apply them onto our data for data ==> result directly.
+
+Inside utils, also make a mthod for capturing model name and its hyperparameters and sort by max value for metrics.
+Use that model in those 2 above methods.
+
+save the model in .pkl file.
+
+Now, integrate MLFlow with it to keep track of logs and metrics and run it on dagshub.
+
+Get result in trainer_artifact.
+
+Training is complete.
+
+
+9. Pipeline/pipeline
+
+In the pipeline folder, make entire pipeline for training, from ingestion till output csv files.
+If this checked out properly. I went to next step, which was to create data_validation, cal it training_pipeline.
+
+10. App.py
+
+Make a fastapi file and run train and predict from this file. 
+
+click train ==> training of pipeline bgings.
+click predict ==> provided usb, it will predict and save file somewhere.
+
+
+12. Dockerization
+11. Make sure its running, then make a docker image of this. Make sure it runs.
+
+13. Github Actions:
+
+Make a file at .github/workflows/unittests.yml
+
+Make Continuous Integration
+     Continuous Delievery
+     Continuous Deployment Actions
+
+This will require AWS credentials. Get them from AWS and save int Github ==> Settings ==> secrets ==> Make new secrets.
+Make a new runner, which will configure EC2 for hosting from Github => Settings => Actions ==> runner
+
+14. EC2 configure
+
+Make a new instance with ubuntu, but without key-value pair.
+
+Go to instance, connect, select to connect with public only. a CLI will appear.
+
+DS ==> Learning Python ==> docker has .txt file.
+
+Paste all commmands sequentially. After that paste runner commands.
+
+We have runner name:- self-hosted.
+
+Configure EC2 till it is looking out for deployments.
+
+Push Github file, it will Automatically trigger actions, make ECR image and deploy at EC2.
+
+Inside EC2 ==> instances ==> security ==> config security ==> inbound security ==> add new ==> 
+
+Add the host of machine (8080:8000, then 8080). And save. 
+
+Run the EC2 instance host with :8080 port (or whatever we menntion during image build) and it should work. 
+
+NOTE: - During Github push that builds image, make sure to comment out the dagshub all code, so as to skip the
+authorization part.
+
 
 
 

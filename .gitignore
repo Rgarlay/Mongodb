@@ -12,6 +12,8 @@ Tutorial_tools
 first_experiment.ipynb
 trial.ipynb
 mlruns/
+steps.txt
+
 
 
 .Python

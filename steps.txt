@@ -11,8 +11,12 @@ git add .
 git commit -m ""
 git push -u origin  (this is it, nothing more in this line)
 
-Then created conda environment using: - "conda create -p venv python==3.7.1 -y"
+Then created conda environment using: - "conda create -p venv python==3.12.7 -y"
 
+make a .env file.
+
+Get the url from Mongodb to put here. Make sure to put it in .gitignore. 
+You will password from Mongodb --> Database and Network --> Authentication.
 
 2. Setup the setup.py file: - 
 

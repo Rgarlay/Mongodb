@@ -46,7 +46,7 @@ class DataValidationConfig:
         self.invalid_test_file_path = os.path.join(self.invalid_data_dir,training_pipeline.TEST_FILE_NAME)
         self.drift_data_file_path = os.path.join(self.data_validation_dir
                                                  ,training_pipeline.DATA_VALIDATION_DRIFT_REPORT_DIR
-                                                 ,training_pipeline.DATA_VALIDATION_DRIFT_REPORT_DIR)
+                                                 ,training_pipeline.DATA_VALIDATION_DRIFT_REPORT_FILE_NAME)
         
 
 class DataTransformationConfig:

@@ -23,7 +23,7 @@ def write_yaml_report(file_path: str, content: object, replace: bool=False):
                 os.remove()
             os.makedirs(os.path.dirname(file_path),exist_ok=True)
             with open(file_path,'w') as file:
-                file.dump(content,file)
+                yaml.dump(content,file)
     except Exception as e:
         raise CustomException(e,sys)
 
